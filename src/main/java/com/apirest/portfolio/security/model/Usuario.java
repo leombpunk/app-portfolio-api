@@ -17,15 +17,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+
 
 /**
  *
  * @author PCcito
  */
-//@Getter @Setter
 @Entity(name="usuarios")
 public class Usuario {
     @Id
@@ -33,17 +32,19 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
-    @Size(max=16)
+    @NotBlank(message = "El usuario no puede ser vacio")
+    @Size(min=4, max=16, message = "Entre 4 a 16 caracteres de lonqitud")
+    @Pattern(regexp="^[a-zA-Z0-9]+$")
     @Column(name="usuario", unique=true)
     private String usuario;
     
-    @NotBlank
+    @NotBlank(message = "La contraseña no puede ser vacia")
+    @Size(min=8, max=255, message = "Entre 8 a 16 caracteres de lonqitud")
     @Column(name="contrasena")
     private String contrasena;
     
     //este campo es opcional
-    @NotNull
+    @NotNull(message = "El rol no puede ser nulo")
     @ManyToMany(fetch = FetchType.EAGER)
     //hago un join a la tabla usuarios_roles
     @JoinTable(name="usuarios_roles", 
